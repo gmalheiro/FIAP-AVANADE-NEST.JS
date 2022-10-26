@@ -18,4 +18,9 @@ export  class ProductsService {
   async update(id: number, req: UpdateProductDTO): Promise<string> {
     return `Produto ${id} atualizado com sucesso!`;
   }
+
+  async delete(id: number): Promise<string> {
+    return `Produto ${id} deletado com sucesso!`;
+  }
+
 }

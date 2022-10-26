@@ -6,6 +6,7 @@ import {
     Param,
     ParseUUIDPipe,
     Patch,
+    Delete,
   } from '@nestjs/common';
   import { ProductsService } from './products.service';
  import  { UpdateProductDTO } from './dto/updateProduct.dto';
@@ -35,4 +36,8 @@ import {
       return this.productService.update(id, req);
     }
     // deletar
+    @Delete(':id')
+    delete(@Param('id', ParseUUIDPipe) id: number) {
+      return this.productService.delete(id);
+    }
   }
