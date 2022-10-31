@@ -19,14 +19,13 @@ export class UsersController {
     }
     // listar um  http://localhost:3000/users/1
     @Get(':id')
-    findOne(@Param('id', ParseUUIDPipe) id: number){
+    findOne(@Param('id', ParseIntPipe) id: number){
         return this.usersService.findOne(+id);
     }
     // atualizar
     @Patch(':id')
     update(
-        @Param('id', ParseUUIDPipe) id: number,
-        @Body() req: UpdateUserDTO){
+        @Param('id', ParseIntPipe) id: number,@Body() req: UpdateUserDTO){
             return this.usersService.update(id, req);
         }
     // deletar
