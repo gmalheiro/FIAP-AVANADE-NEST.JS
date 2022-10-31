@@ -1,3 +1,4 @@
+import { CreateUserDTO } from './dto/createUser.dto';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { users } from '@prisma/client';
 import { PrismaService } from '../prisma.service';
@@ -6,8 +7,10 @@ import { UpdateUserDTO } from './dto/updateUser.dto';
 @Injectable()
 export class UsersService {
     constructor(private prisma: PrismaService) {}
-    async create(data): Promise<users> {
+
+    async create(data : CreateUserDTO ): Promise<users> {
         const {name, email, password} = data;
+
         const user = await this.prisma.users.create({
             data: {
                 name,
