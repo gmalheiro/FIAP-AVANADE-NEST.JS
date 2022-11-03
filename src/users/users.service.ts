@@ -12,15 +12,15 @@ export class UsersService {
     private emailService: EmailService,
   ) {}
 
-  async getUserByID(id:string): Promise<users>{
+  async getUserById(id: string): Promise<users> {
     const user = await this.prisma.users.findUnique({
-      where:{
-        id:Number(id)
-      }
-    })
+      where: {
+        id: Number(id),
+      },
+    });
 
-    if(!user){
-      throw new HttpException(' Usuário não encontrado',HttpStatus.NOT_FOUND)
+    if (!user) {
+      throw new HttpException('Usuário não encontrado', HttpStatus.NOT_FOUND);
     }
     return user;
   }
@@ -98,20 +98,32 @@ export class UsersService {
     });
   }
 
-  async update(id: number, req: UpdateUserDTO): Promise<users> {
-    const user = await this.getUserByID(id.toString());
+  async update(id: number, req: UpdateUserDTO): Promise<object> {
+    const user = await this.getUserById(id.toString());
 
     const { name, email, password } = req;
-    return await this.prisma.users.update({
+    const updatedUser = await this.prisma.users.update({
       where: {
         id: Number(id),
       },
       data: {
-        name:  name ? name : user.name,
+        name: name ? name : user.name,
         email: email ? email : user.email,
         password: password ? await this.crypto(password) : user.password,
       },
     });
+
+    if (!updatedUser) {
+      throw new HttpException(
+        {
+          status: HttpStatus.FORBIDDEN,
+          message: 'Erro ao atualizar usuário!',
+        },
+        HttpStatus.FORBIDDEN,
+      );
+    }
+
+    return { msg: `Usuário ${updatedUser.name} atualizado com sucesso!` };
   }
 
   async remove(id: number): Promise<string> {
