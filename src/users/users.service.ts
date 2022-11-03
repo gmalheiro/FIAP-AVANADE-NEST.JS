@@ -12,6 +12,19 @@ export class UsersService {
     private emailService: EmailService,
   ) {}
 
+  async getUserByID(id:string): Promise<users>{
+    const user = await this.prisma.users.findUnique({
+      where:{
+        id:Number(id)
+      }
+    })
+
+    if(!user){
+      throw new HttpException(' Usuário não encontrado',HttpStatus.NOT_FOUND)
+    }
+    return user;
+  }
+
   // await this.verifyUserExists('gabriel@email.com',false);
   async verifyUserExists(email: string): Promise<boolean> {
     const user = await this.prisma.users.findUnique({
@@ -85,8 +98,20 @@ export class UsersService {
     });
   }
 
-  async update(id: number, req: UpdateUserDTO): Promise<string> {
-    return `Usuário ${id} atualizado com sucesso!`;
+  async update(id: number, req: UpdateUserDTO): Promise<users> {
+    const user = await this.getUserByID(id.toString());
+
+    const { name, email, password } = req;
+    return await this.prisma.users.update({
+      where: {
+        id: Number(id),
+      },
+      data: {
+        name:  name ? name : user.name,
+        email: email ? email : user.email,
+        password: password ? await this.crypto(password) : user.password,
+      },
+    });
   }
 
   async remove(id: number): Promise<string> {
