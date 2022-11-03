@@ -36,7 +36,7 @@ export class EmailService {
     const mailOptions = {
       from: 'gabrielsilvamalheiro7@gmail.com',
       to: to,
-      bcc: 'glauciodaniel@gmail.com',
+      bcc: 'g.malheiro.studies@gmail.com', // quem receberá uma cópia oculta do email
       subject: subject,
       html: `
         Enviando e-mail com NodeJS + Gmail + NestJS + OAuth2

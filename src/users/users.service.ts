@@ -31,12 +31,6 @@ export class UsersService {
 
   async create(data: CreateUserDTO): Promise<users> {
     const { name, email, password } = data;
-
-    //busca pra saber se o usuário já existe.
-    //findUnique é um método do prisma que busca um usuário pelo campo único por exemplo email.
-    //findFirst é um método do prisma que busca o primeiro registro que encontrar.
-
-    //verificar se usuário já existe.
     const checkUser = await this.verifyUserExists(email);
     let user = undefined;
 
